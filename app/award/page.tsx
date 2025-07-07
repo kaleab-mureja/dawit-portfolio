@@ -7,7 +7,7 @@ const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_VERCEL_URL) {
     return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
   }
-  return `http://`;
+  return `http://dawit-mureja.vercel.app/`;
 };
 
 const getAwardData = async (): Promise<AwardEntry[]> => {
