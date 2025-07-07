@@ -134,7 +134,7 @@ const EducationAndNewsPage = forwardRef<HTMLElement>(
         ref={ref}
         id="education"
         className="pt-20 md:pt-30 flex flex-col justify-center items-center gap-5 md:gap-10">
-        <section className="bg-gray-800/25 rounded-lg w-full p-4 max-w-7xl shadow-xl">
+        <section className="bg-gray-800/25 rounded-lg w-full p-2 md:p-4 max-w-7xl shadow-xl">
           <h1 className="text-xl md:text-2xl font-extrabold text-[#60a5fa] mb-4 md:mb-6 text-center md:text-left mx-2">
             Education
           </h1>

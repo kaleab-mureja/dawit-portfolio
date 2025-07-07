@@ -129,7 +129,7 @@ const ExperiencePage = forwardRef<HTMLElement>((props, ref) => {
       ref={ref}
       id="experience"
       className="py-20 md:pt-30 flex flex-col justify-center items-center gap-5 md:gap-10">
-      <div className="bg-gray-800/25 rounded-lg w-full p-4 max-w-7xl shadow-xl">
+      <div className="bg-gray-800/25 rounded-lg w-full p-2 md:p-4 max-w-7xl shadow-xl">
         <h1 className="text-xl md:text-2xl font-extrabold text-[#60a5fa] mb-4 md:mb-6 text-center md:text-left mx-2">
           Experience
         </h1>
@@ -144,7 +144,7 @@ const ExperiencePage = forwardRef<HTMLElement>((props, ref) => {
                   key={exp._id}
                   className="
                     flex flex-col
-                    bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-900
+                    bg-gray-800 p-2 md:p-4 rounded-xl shadow-lg border border-gray-900
                     transform transition-all duration-300 ease-in-out
                     hover:shadow-2xl hover:bg-gray-900 hover:scale-[1.02] hover:border-blue-900
                   ">

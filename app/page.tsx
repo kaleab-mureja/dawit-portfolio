@@ -80,7 +80,7 @@ export default function Homepage() {
   return (
     <main className="flex flex-col justify-between item-center">
       <Navbar navLinks={navLinks} isLinkActive={isLinkActive} />
-      <section className="px-8 md:px-12 pt-[60px]">
+      <section className="px-6 md:px-12 pt-[60px]">
         <About ref={aboutRef} />
         <Education ref={educationRef} />
         <Publications ref={publicationsRef} />

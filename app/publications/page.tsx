@@ -122,7 +122,7 @@ const PublicationPage = forwardRef<HTMLElement>((props, ref) => {
       ref={ref}
       id="publications"
       className="pt-20 md:pt-30 flex flex-col justify-center items-center gap-5 md:gap-10">
-      <div className="bg-gray-800/25 rounded-lg w-full p-4 max-w-7xl shadow-xl">
+      <div className="bg-gray-800/25 rounded-lg w-full p-2 md:p-4 max-w-7xl shadow-xl">
         <h1 className="text-xl md:text-2xl font-extrabold text-[#60a5fa] mb-4 md:mb-6 text-center md:text-left mx-2">
           Publications
         </h1>
@@ -130,14 +130,14 @@ const PublicationPage = forwardRef<HTMLElement>((props, ref) => {
         {publications.length > 0 ? (
           <>
             <div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6
                           transition-transform duration-500 ease-in-out">
               {currentPublications.map((pub) => (
                 <div
                   key={pub._id}
                   className="
                     flex flex-col
-                    bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-900
+                    bg-gray-800 p-2 md:p-4 rounded-xl shadow-lg border border-gray-900
                     transform transition-all duration-300 ease-in-out
                     hover:shadow-2xl hover:bg-gray-900 hover:scale-[1.02] hover:border-blue-900
                   ">
