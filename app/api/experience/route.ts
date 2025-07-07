@@ -12,11 +12,11 @@ export async function GET() {
 
     const serializedExperiences: ExperienceEntry[] = experiences.map(
       (entry) => ({
-        ...entry, 
-        _id: entry._id.toString(), 
-        image: entry.image || undefined, 
-        createdAt: (entry.createdAt as Date).toISOString(),
-        updatedAt: (entry.updatedAt as Date).toISOString(), 
+        ...entry,
+        _id: entry._id.toString(),
+        image: entry.image || undefined,
+        createdAt: new Date(entry.createdAt).toISOString(), // Robust date conversion
+        updatedAt: new Date(entry.updatedAt).toISOString(), // Robust date conversion
       })
     );
 
@@ -24,13 +24,22 @@ export async function GET() {
   } catch (error: unknown) {
     console.error("API Error fetching experience data:", error);
 
-    let message = "Error fetching experience data.";
+    let errorMessage: string;
     if (error instanceof Error) {
-      message = `Error fetching experience data: ${error.message}`;
+      errorMessage = error.message;
     } else if (typeof error === "string") {
-      message = `Error fetching experience data: ${error}`;
+      errorMessage = error;
+    } else {
+      errorMessage = "Unknown error occurred."; // More specific unknown error message
     }
 
-    return NextResponse.json({ message: message }, { status: 500 });
+    // Aligned error response structure with publication/news routes
+    return NextResponse.json(
+      {
+        message: "Error fetching experience data", // Consistent message for the client
+        error: errorMessage, // Detailed error message for debugging
+      },
+      { status: 500 }
+    );
   }
 }

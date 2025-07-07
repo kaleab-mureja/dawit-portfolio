@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/mongoose";
 import ServiceModel from "../../../models/Service";
-import { IService } from "../../../types"; // Assuming IService is correctly defined here
+import { IService } from "../../../types";
 
 export async function GET() {
   await dbConnect();
@@ -9,28 +9,31 @@ export async function GET() {
     const services: IService[] = await ServiceModel.find({}).lean().exec();
 
     const serializedServices: IService[] = services.map((entry) => ({
+      ...entry,
       _id: entry._id.toString(),
-      category: entry.category,
-      details: entry.details,
-      createdAt:
-        entry.createdAt instanceof Date
-          ? entry.createdAt.toISOString()
-          : (entry.createdAt as string),
-      updatedAt:
-        entry.updatedAt instanceof Date
-          ? entry.updatedAt.toISOString()
-          : (entry.updatedAt as string),
+      createdAt: new Date(entry.createdAt).toISOString(),
+      updatedAt: new Date(entry.updatedAt).toISOString(),
     }));
 
     return NextResponse.json(serializedServices, { status: 200 });
-  } catch (e: unknown) {
-    console.error("API Error fetching service data:", e);
-    let errorMessage = "Error fetching service data";
-    if (e instanceof Error) {
-      errorMessage = e.message;
-    } else if (typeof e === "string") {
-      errorMessage = e;
+  } catch (error: unknown) {
+    console.error("API Error fetching service data:", error);
+
+    let errorMessage: string;
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === "string") {
+      errorMessage = error;
+    } else {
+      errorMessage = "Unknown error occurred.";
     }
-    return NextResponse.json({ message: errorMessage }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        message: "Error fetching service data",
+        error: errorMessage,
+      },
+      { status: 500 }
+    );
   }
 }

@@ -160,7 +160,7 @@ const PublicationPage = forwardRef<HTMLElement>((props, ref) => {
                       {pub.title}
                     </h2>
                     <p className="text-sm text-gray-300 mb-1">
-                      {pub.authors.join(", ")}
+                      {pub.authors?.join(", ") ?? "N/A"}
                     </p>
                     <p className="text-xs text-gray-400 mb-2">
                       {pub.conferenceOrJournal}, {pub.year}
@@ -267,6 +267,6 @@ const PublicationPage = forwardRef<HTMLElement>((props, ref) => {
   );
 });
 
-PublicationPage.displayName = "PublicationPage"; 
+PublicationPage.displayName = "PublicationPage";
 
 export default PublicationPage;

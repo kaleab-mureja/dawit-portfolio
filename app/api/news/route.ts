@@ -1,4 +1,3 @@
-// app/api/news/route.ts
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/mongoose";
 import NewsModel from "../../../models/News";
@@ -6,28 +5,38 @@ import { NewsEntry } from "../../../types/index";
 
 export async function GET() {
   await dbConnect();
+
   try {
     const newsData = await NewsModel.find({}).lean().exec();
 
     const serializedNews: NewsEntry[] = newsData.map((entry) => ({
+      ...entry,
       _id: entry._id.toString(),
-      content: entry.content,
-      eventDate: entry.eventDate ? (entry.eventDate as Date).toISOString() : undefined,
-      createdAt: (entry.createdAt as Date).toISOString(),
-      updatedAt: (entry.updatedAt as Date).toISOString(),
+      eventDate: entry.eventDate
+        ? new Date(entry.eventDate).toISOString()
+        : undefined,
+      createdAt: new Date(entry.createdAt).toISOString(),
+      updatedAt: new Date(entry.updatedAt).toISOString(),
     }));
 
     return NextResponse.json(serializedNews, { status: 200 });
   } catch (error: unknown) {
     console.error("API Error fetching news data:", error);
-    let message = "Error fetching news data.";
+
+    let errorMessage: string;
     if (error instanceof Error) {
-      message = `Error fetching news data: ${error.message}`;
+      errorMessage = error.message;
     } else if (typeof error === "string") {
-      message = `Error fetching news data: ${error}`;
+      errorMessage = error;
+    } else {
+      errorMessage = "Unknown error occurred.";
     }
+
     return NextResponse.json(
-      { message: message },
+      {
+        message: "Error fetching news data",
+        error: errorMessage,
+      },
       { status: 500 }
     );
   }

@@ -144,7 +144,7 @@ const ExperiencePage = forwardRef<HTMLElement>((props, ref) => {
                   key={exp._id}
                   className="
                     flex flex-col
-                    bg-gray-800 p-2 md:p-4 rounded-xl shadow-lg border border-gray-900
+                    bg-gray-800 p-3 md:p-4 rounded-xl shadow-lg border border-gray-900
                     transform transition-all duration-300 ease-in-out
                     hover:shadow-2xl hover:bg-gray-900 hover:scale-[1.02] hover:border-blue-900
                   ">
