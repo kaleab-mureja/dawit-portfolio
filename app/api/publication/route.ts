@@ -3,10 +3,25 @@ import dbConnect from "../../../lib/mongoose";
 import PublicationModel from "../../../models/Publication";
 import { PublicationEntry } from "../../../types/index";
 
+interface PublicationDocLean {
+  _id: { toString(): string };
+  image?: string;
+  title: string;
+  authors: string[];
+  conferenceOrJournal: string;
+  year: number;
+  pdfLink?: string;
+  codeLink?: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  [key: string]: unknown;
+}
+
 export async function GET() {
   await dbConnect();
   try {
-    const publications = await PublicationModel.find({}).lean().exec();
+    const publicationsRaw = await PublicationModel.find({}).lean().exec();
+    const publications = publicationsRaw as unknown as PublicationDocLean[];
 
     const serializedPublications: PublicationEntry[] = publications.map(
       (entry) => ({

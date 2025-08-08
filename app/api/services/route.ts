@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/mongoose";
 import ServiceModel from "../../../models/Service";
-import { IService } from "../../../types";
+import { ServiceEntry } from "../../../types";
 
+interface ServiceDocLean {
+  _id: { toString(): string };
+  category: string;
+  details: { item: string }[];
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  [key: string]: unknown;
+}
+ 
 export async function GET() {
   await dbConnect();
   try {
-    const services: IService[] = await ServiceModel.find({}).lean().exec();
+    const servicesRaw = await ServiceModel.find({}).lean().exec();
+    const services = servicesRaw as unknown as ServiceDocLean[];
 
-    const serializedServices: IService[] = services.map((entry) => ({
+    const serializedServices: ServiceEntry[] = services.map((entry) => ({
       ...entry,
       _id: entry._id.toString(),
       createdAt: new Date(entry.createdAt).toISOString(),

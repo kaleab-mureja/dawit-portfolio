@@ -4,11 +4,26 @@ import dbConnect from "../../../lib/mongoose";
 import ExperienceModel from "../../../models/Experience";
 import { ExperienceEntry } from "../../../types/index";
 
+interface ExperienceDocLean {
+  _id: { toString(): string };
+  image?: string;
+  title: string;
+  organization: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  description?: string[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  [key: string]: unknown;
+}
+
 export async function GET() {
   await dbConnect();
 
   try {
-    const experiences = await ExperienceModel.find({}).lean().exec();
+    const experiencesRaw = await ExperienceModel.find({}).lean().exec();
+    const experiences = experiencesRaw as unknown as ExperienceDocLean[];
 
     const serializedExperiences: ExperienceEntry[] = experiences.map(
       (entry) => ({

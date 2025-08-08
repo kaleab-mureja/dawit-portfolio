@@ -1,22 +1,26 @@
 // lib/mongoose.ts 
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI;
 
-if (!MONGO_URI) {
-  throw new Error(
-    "Please define the MONGO_URI environment variable inside .env.local"
-  );
+interface MongooseCache {
+  conn: Mongoose | null;
+  promise: Promise<Mongoose> | null;
 }
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents creating multiple connections during development.
  */
-let cached = global.mongoose;
+const globalForMongoose = global as unknown as { mongoose?: MongooseCache };
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+const cached: MongooseCache = globalForMongoose.mongoose ?? {
+  conn: null,
+  promise: null,
+};
+
+if (!globalForMongoose.mongoose) {
+  globalForMongoose.mongoose = cached;
 }
 
 async function dbConnect() {
@@ -24,11 +28,16 @@ async function dbConnect() {
     return cached.conn;
   }
   if (!cached.promise) {
+    if (!MONGO_URI) {
+      throw new Error(
+        "Please define the MONGO_URI environment variable inside .env.local"
+      );
+    }
     const opts = {
       bufferCommands: false, // Disables Mongoose's internal buffering
-    };
-    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
-      return mongoose;
+    } as const;
+    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongooseInstance) => {
+      return mongooseInstance;
     });
   }
   try {

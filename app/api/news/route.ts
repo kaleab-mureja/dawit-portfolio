@@ -3,17 +3,27 @@ import dbConnect from "../../../lib/mongoose";
 import NewsModel from "../../../models/News";
 import { NewsEntry } from "../../../types/index";
 
+interface NewsDocLean {
+  _id: { toString(): string };
+  content: string;
+  eventDate?: string | Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  [key: string]: unknown;
+}
+
 export async function GET() {
   await dbConnect();
 
   try {
-    const newsData = await NewsModel.find({}).lean().exec();
+    const newsDataRaw = await NewsModel.find({}).lean().exec();
+    const newsData = newsDataRaw as unknown as NewsDocLean[];
 
     const serializedNews: NewsEntry[] = newsData.map((entry) => ({
       ...entry,
       _id: entry._id.toString(),
       eventDate: entry.eventDate
-        ? new Date(entry.eventDate).toISOString()
+        ? new Date(entry.eventDate as string).toISOString()
         : undefined,
       createdAt: new Date(entry.createdAt).toISOString(),
       updatedAt: new Date(entry.updatedAt).toISOString(),

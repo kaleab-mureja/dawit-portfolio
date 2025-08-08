@@ -1,8 +1,6 @@
 // These interfaces represent the shape of data *after* JSON serialization,
 // which is what your Next.js components will receive.
 
-import { StringExpressionOperatorReturningArray } from "mongoose";
-
 export interface EducationEntry {
   _id: string;
   degree: string;
@@ -20,9 +18,9 @@ export interface EducationEntry {
 export interface NewsEntry {
   _id: string;
   content: string;
-  eventDate?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  eventDate?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PublicationEntry {
@@ -43,8 +41,8 @@ export interface AwardEntry {
   title: string;
   awardingBody: string;
   year: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ExperienceEntry {
@@ -57,7 +55,7 @@ export interface ExperienceEntry {
   endDate: string;
   description?: string[];
   createdAt: string;
-  updatedAt: String;
+  updatedAt: string;
 }
 
 export interface IServiceDetail {
@@ -68,4 +66,13 @@ export interface IService {
   details: IServiceDetail[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+// Client-consumed Service entry shape after serialization
+export interface ServiceEntry {
+  _id: string;
+  category: string;
+  details: { item: string }[];
+  createdAt: string;
+  updatedAt: string;
 }

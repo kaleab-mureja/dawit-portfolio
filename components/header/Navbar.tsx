@@ -32,7 +32,8 @@ export default function Navbar({ navLinks, isLinkActive }: NavbarProps) {
                 : "px-4 py-2 text-bold text-gray-300 transition-all duration-300 ease-in-out hover:text-[#60a5fa]"
             }`}
             href={`/#${link.path}`}
-            scroll={true}>
+            scroll={true}
+            aria-current={isLinkActive(link.path) ? "true" : undefined}>
             {link.name}
           </Link>
         ))}

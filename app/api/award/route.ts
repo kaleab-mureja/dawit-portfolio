@@ -4,11 +4,22 @@ import dbConnect from "../../../lib/mongoose";
 import AwardModel from "../../../models/Award";
 import { AwardEntry } from "../../../types";
 
+interface AwardDocLean {
+  _id: { toString(): string };
+  title: string;
+  awardingBody: string;
+  year: number;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  [key: string]: unknown;
+}
+
 export async function GET() {
   await dbConnect();
 
   try {
-    const awards = await AwardModel.find({}).sort({ year: -1 }).lean().exec();
+    const awardsRaw = await AwardModel.find({}).sort({ year: -1 }).lean().exec();
+    const awards = awardsRaw as unknown as AwardDocLean[];
 
     const serializedAwards: AwardEntry[] = awards.map((entry) => ({
       ...entry,

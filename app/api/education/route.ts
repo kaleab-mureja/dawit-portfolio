@@ -4,13 +4,29 @@ import dbConnect from "../../../lib/mongoose";
 import EducationModel from "../../../models/Education";
 import { EducationEntry } from "../../../types";
 
+interface EducationDocLean {
+  _id: { toString(): string };
+  degree: string;
+  university: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  gpa?: string;
+  thesis?: string;
+  advisors?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  [key: string]: unknown;
+}
+
 export async function GET() {
   await dbConnect();
   try {
-    const education = await EducationModel.find({})
+    const educationRaw = await EducationModel.find({})
       .sort({ endDate: -1 })
       .lean()
       .exec();
+    const education = educationRaw as unknown as EducationDocLean[];
     const serializedEducation: EducationEntry[] = education.map((entry) => ({
       ...entry,
       _id: entry._id.toString(),
@@ -23,7 +39,7 @@ export async function GET() {
     return NextResponse.json(
       {
         message: "Error fetching education data",
-        error:"Unknown error",
+        error: "Unknown error",
       },
       { status: 500 }
     );

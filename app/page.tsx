@@ -1,34 +1,36 @@
 // app/Homepage.tsx
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback, useMemo } from "react";
 import Navbar from "@/components/header/Navbar";
-import About from "./about/page";
-import Education from "./education/page";
-import Publications from "./publications/page";
-import Awards from "./award/page";
-import Services from "./service/page";
-import Experiences from "./experience/page";
+import AboutSection from "./about/Section";
+import EducationSection from "./education/Section";
+import PublicationSection from "./publications/Section";
+import AwardSection from "./award/Section";
+import ServiceSection from "./service/Section";
+import ExperienceSection from "./experience/Section";
 import Footer from "../components/footer/Footer";
 
 export default function Homepage() {
-  const aboutRef = useRef<HTMLElement>(null);
-  const educationRef = useRef<HTMLElement>(null);
-  const publicationsRef = useRef<HTMLElement>(null);
-  const awardsRef = useRef<HTMLElement>(null);
-  const experienceRef = useRef<HTMLElement>(null);
-  const servicesRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const educationRef = useRef<HTMLDivElement>(null);
+  const publicationsRef = useRef<HTMLDivElement>(null);
+  const awardsRef = useRef<HTMLDivElement>(null);
+  const experienceRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   const [activeSectionId, setActiveSectionId] = useState<string>("");
 
-  const sections = [
-    { id: "about", ref: aboutRef },
-    { id: "education", ref: educationRef },
-    { id: "publications", ref: publicationsRef },
-    { id: "awards", ref: awardsRef },
-    { id: "experience", ref: experienceRef },
-    { id: "service", ref: servicesRef },
-  ];
+  const sections = useMemo(
+    () => [
+      { id: "about", ref: aboutRef },
+      { id: "education", ref: educationRef },
+      { id: "publications", ref: publicationsRef },
+      { id: "awards", ref: awardsRef },
+      { id: "experience", ref: experienceRef },
+      { id: "service", ref: servicesRef },
+    ], []
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,8 +42,8 @@ export default function Homepage() {
       },
       {
         root: null,
-        rootMargin: "-50px 0px -50px 0px", // Adjust as needed
-        threshold: 0.3, // Adjust as needed
+        rootMargin: "-50px 0px -50px 0px",
+        threshold: 0.3,
       }
     );
 
@@ -59,7 +61,7 @@ export default function Homepage() {
       });
       observer.disconnect();
     };
-  }, []);
+  }, [sections]);
 
   const isLinkActive = useCallback(
     (sectionId: string) => {
@@ -81,12 +83,24 @@ export default function Homepage() {
     <main className="flex flex-col justify-between item-center">
       <Navbar navLinks={navLinks} isLinkActive={isLinkActive} />
       <section className="px-6 md:px-12 pt-[60px]">
-        <About ref={aboutRef} />
-        <Education ref={educationRef} />
-        <Publications ref={publicationsRef} />
-        <Awards ref={awardsRef} />
-        <Experiences ref={experienceRef} />
-        <Services ref={servicesRef} />
+        <div id="about" ref={aboutRef}>
+          <AboutSection />
+        </div>
+        <div id="education" ref={educationRef}>
+          <EducationSection />
+        </div>
+        <div id="publications" ref={publicationsRef}>
+          <PublicationSection />
+        </div>
+        <div id="awards" ref={awardsRef}>
+          <AwardSection />
+        </div>
+        <div id="experience" ref={experienceRef}>
+          <ExperienceSection />
+        </div>
+        <div id="service" ref={servicesRef}>
+          <ServiceSection />
+        </div>
       </section>
       <Footer />
     </main>
